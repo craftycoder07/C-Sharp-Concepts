@@ -4,3 +4,4 @@
 2. [Constructor With Base Keyword](./ConstructorWithBaseKeyword/)
 3. [Readonly Fields](./ReadonlyFields/)
 4. [Properties](./Properties/)
+5. [Anonymous Types](./AnonymousTypes/)

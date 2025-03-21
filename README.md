@@ -5,3 +5,4 @@
 3. [Readonly Fields](./ReadonlyFields/)
 4. [Properties](./Properties/)
 5. [Anonymous Types](./AnonymousTypes/)
+6. [Methods](./Methods/)

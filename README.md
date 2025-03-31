@@ -11,3 +11,4 @@
 9. [Extension Methods](./ExtensionMethods/)
 10. [Inheritance](./Inheritance/)
 11. [Method Overriding](./MethodOverriding/)
+12. [Method Hiding](./MethodHiding/)

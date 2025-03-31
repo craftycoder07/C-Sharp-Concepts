@@ -7,6 +7,6 @@
 5. [Anonymous Types](./AnonymousTypes/)
 6. [Methods](./Methods/)
 7. [Constructors](./Constructor/)
-8. [Passing By Value and REference](./PassingByValueAndReference/)
+8. [Passing By Value and Reference](./PassingByValueAndReference/)
 9. [Extension Methods](./ExtensionMethods/)
-10.[Inheritance](./Inheritance/)
+10. [Inheritance](./Inheritance/)

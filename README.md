@@ -9,3 +9,4 @@
 7. [Constructors](./Constructor/)
 8. [Passing By Value and REference](./PassingByValueAndReference/)
 9. [Extension Methods](./ExtensionMethods/)
+10.[Inheritance](./Inheritance/)

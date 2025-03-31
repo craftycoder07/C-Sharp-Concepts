@@ -40,6 +40,11 @@ public class Manager : Employee
     {
         
     }
+
+    public void DoPerformanceReview()
+    {
+        throw new NotImplementedException();
+    }
 }
 
 public interface IEmployeeActions

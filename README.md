@@ -14,3 +14,4 @@
 12. [Method Hiding](./MethodHiding/)
 13. [Calling Base Version Of the Method](./CallingBaseVersionOfMethod/)
 14. [Abstract Classes & Methods](./AbstractClassesAndMethods/)
+15. [Sealed Classes & Methods](./SealedClassesAndMethods/)

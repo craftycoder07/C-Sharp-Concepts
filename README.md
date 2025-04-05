@@ -17,3 +17,4 @@
 15. [Sealed Classes & Methods](./SealedClassesAndMethods/)
 16. [Access Modifiers](./AccessModifiers/)
 17. [Is & as Operators](./IsAndAsOperators/)
+18. [Interfaces](./Interfaces/)

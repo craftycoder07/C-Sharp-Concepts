@@ -1,61 +1,60 @@
 ﻿/*
- * WHAT IS ASYNCHRONOUS?
- * You start something and don't wait for it to finish.
+ * Initially computers were single threaded. Single threads was used for all purposes, like UI and any other tasks.
+ * Now if that one thread is performing long-running task, it won't be able to respond to UI inputs. Basically it will block the UI.
+ * For this reason multithreading was introduced. (Threads in C#)
  */
  
-//THREAD ISSUES
-//ISSUE-1: Threads are async. (If you look at the output it's not sequential.)
-Console.WriteLine($"Before thread");
+Console.WriteLine("Long-running task Blocking thread. Press any key for demo.");
+Console.ReadKey();
+//Assume following is a long-running task. In this case main thread will be blocked and user experience will be ruined.
+//Below demo will print 'Before Thread' then WAIT for long-running task to finish and then print 'After Thread'. Blocking behaviour.
+Console.WriteLine("Before thread.");
+Thread.Sleep(10000);
+Console.WriteLine("After thread.");
+
+
+Console.WriteLine("Long running task offloaded to a thread for NON blocking thread. Press any key for demo.");
+Console.ReadKey();
+//With threads, developers can offload long-running task to other thread, which will not block the main thread (UI-thread)
+//Below demo will print 'Before Thread' and then immediately print 'After Thread' and won't wait for long-running task to finish. NON blocking behaviour.
+Console.WriteLine($"Before Thread");
 new Thread(() =>
 {
-    Thread.Sleep(500);
-    Console.WriteLine($"Inside thread");
+    Thread.Sleep(10000);
+    Console.WriteLine($"Inside Thread with id =>{Thread.CurrentThread.ManagedThreadId}");
 }).Start();
-Console.WriteLine($"After thread");
+Console.WriteLine($"After Thread");
+
 
 /*
- * To solve that issue, developers can use 'blocking wait' concept.
- * Problem with that is it blocks the main thread which is a big issue in UI applications.
+ * Problem with threads is that they run asynchronously which can alter the perceived flow of the program.
+ * Plus they don't have return type, so it is difficult to return value from threads.
+ * To overcome these issues 'Task' were introduced.
+ * Behind the scenes, Task also uses threads.
  */
-Thread t1 = new Thread(() =>
-{
-    Thread.Sleep(500);
-    Console.WriteLine($"Inside thread 1");
-});
-t1.Start();
-t1.Join();
 
-/*
- * To overcome these issues we have tasks.
- * It is a promise that work will finish in the future.
- * It is an actual object.
- * Any method that returns Task can be awaited.
- * Tasks MAY use threads from thread pool to execute operation.
- */
+//With the help of task, developers can return a value just like we do in regular method.
+Console.WriteLine("Task Example. Press any key for demo.");
+Console.ReadKey();
 Console.WriteLine($"Before Task");
-await Task.Run(() =>
+var result = Task.Run<string>(() =>
 {
-    Task.Delay(500);
-    Console.WriteLine($"Inside Task");
+    Thread.Sleep(10000);
+    return $"Id of thread running task is {Thread.CurrentThread.ManagedThreadId}";
 });
+Console.WriteLine(result);
 Console.WriteLine($"After Task");
 
-static void PrintTask()
+
+//Above example would still execute long-running task out of perceived order.
+//To overcome this issue, async & await were introduced.
+Console.WriteLine("Task with AWAIT Example. Press any key for demo.");
+Console.ReadKey();
+Console.WriteLine($"Before Task With AWAIT Example.");
+var result1 = await Task.Run<string>(() =>
 {
-    Console.WriteLine($"Thread Id: {Thread.CurrentThread.ManagedThreadId}");
-    Console.WriteLine($"Print Task method");
-}
-
-//Another way of calling task.
-Console.WriteLine($"Thread Id: {Thread.CurrentThread.ManagedThreadId}");
-Console.WriteLine($"Before Task 2");
-Task t2 = new Task(PrintTask);
-t2.Start();
-await t2;
-Console.WriteLine($"Thread Id: {Thread.CurrentThread.ManagedThreadId}");
-Console.WriteLine($"After Task 2");
-
-Console.ReadLine();
-
-
-
+    Thread.Sleep(10000);
+    return $"Id of thread running task is {Thread.CurrentThread.ManagedThreadId}";
+});
+Console.WriteLine(result1);
+Console.WriteLine($"After Task With AWAIT Example.");

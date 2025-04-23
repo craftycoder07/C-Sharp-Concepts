@@ -1,0 +1,67 @@
+﻿namespace GarbageCollectorDemo
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Please press 1 for Demo of GC for managed objects");
+            Console.WriteLine("Please press 2 for Demo of GC for primitive types");
+            string? selectedOption = Console.ReadLine();
+
+            switch (selectedOption)
+            {
+                case "1":
+                    //Demo GC for Managed objects
+                    DemoGCForManagedObjects();
+                    break;
+                case "2":
+                    //Demo GC for primitive types
+                    DemoGCForPrmitiveTypes();
+                    break;
+                default:
+                    Console.WriteLine("Incorrect selection. Please run the app again.");
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// This method demostrates how unreferenced managed objects are cleaned by GC.
+        /// </summary>
+        static void DemoGCForManagedObjects()
+        {
+            Console.WriteLine("Press enter to start GC for managed object demo");
+            Console.ReadKey();
+            for (long i = 0; i < 2000000; i++)
+            {
+                Console.WriteLine(i);
+
+                /*
+                 * This is managed object.
+                 * As soon as for loop goes to next iteration object becomes unreferenced. (Becomes eligible for GC)
+                 * GC won't immediatly kick in.
+                 * When there is strain on memory GC will collect unreferenced objects.
+                 * In performance counter, you will see GC heap size going UP and DOWN indicating that unreferenced managed objects are cleaned by GC
+                 */
+                MyClass myClass = new MyClass();
+            }
+            Console.WriteLine("After FOR loop");
+            Console.ReadKey();
+        }
+
+        static void DemoGCForPrmitiveTypes()
+        {
+            Console.WriteLine("Press enter to start GC for primitive type demo");
+            Console.ReadKey();
+            for (long i = 0; i < 2000000000000; i++)
+            {
+                /*
+                 * This is primitive type. They live on 'Stack' memeory hence not cleaned up by GC.
+                 * You will very small change in size of heap memeory unlike 'DemoGCForManagedObjects' where heap memory size changes drastically.
+                 */
+                int j = 0;
+            }
+            Console.WriteLine("After FOR loop");
+            Console.ReadKey();
+        }
+    }
+}

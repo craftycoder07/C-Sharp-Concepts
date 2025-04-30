@@ -25,8 +25,8 @@
                     DemoGCForUnmangedObjects();
                     break;
                 case "4":
-                    //Demo GC for unmanaged types with finalizers
-                    DemoGCForUnmangedObjectsWithFinalizers();
+                    //Demo GC for managed types with finalizers
+                    DemoGCForMamangedObjectsWithFinalizers();
                     break;
                 default:
                     Console.WriteLine("Incorrect selection. Please run the app again.");
@@ -101,24 +101,27 @@
         }
         
         /// <summary>
-        /// This method demonstrates how unmanaged objects not cleaned by GC even though they are allocated on heap.
+        /// This method demonstrates how having a finalizer in a managed object to clean unmanaged object delays GC.
+        /// That object gets promoted to next GC heap level as GC gives managed object time to execute finalizer.
         /// </summary>
-        static void DemoGCForUnmangedObjectsWithFinalizers()
+        static void DemoGCForMamangedObjectsWithFinalizers()
         {
             Console.WriteLine("Press enter to start GC for un-managed object demo with finalizers");
             Console.ReadKey();
-            for (long i = 0; i < 2000000; i++)
+            for (long i = 0; i < 5000000; i++)
             {
                 Console.WriteLine(i);
 
                 /*
-                 * This is un-managed object.
+                 * This is a managed object.
                  * As soon as for loop goes to next iteration object becomes unreferenced. (Becomes eligible for GC)
-                 * When GC kick in, it will NOT collect unmanaged objects, leaving behind memory leak.
-                 * In performance counter, you will see GC heap size won't change indicating that unmanaged objects are NOT cleaned by GC
+                 * When GC kick in, it will NOT collect managed objects, as it has finalizer.
+                 * GC will give time to that object to execute finalizer and in meantime will promote it to next gen.
+                 * In performance counter, you will see gen 1 & 2 heaps increasing and decreasing as it objects keep on promoting because of finalizers.
                  */
-                UnmanagedObjectWithFinalizer myClass = new UnmanagedObjectWithFinalizer(i);
+                UnmanagedObjectWithFinalizer myClass = new UnmanagedObjectWithFinalizer();
             }
+            
             Console.WriteLine("After FOR loop");
             Console.ReadKey();
         }

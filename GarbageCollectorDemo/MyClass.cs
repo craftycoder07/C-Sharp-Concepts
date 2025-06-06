@@ -31,11 +31,82 @@ namespace GarbageCollectorDemo
         }
     }
     
-    internal class UnmanagedObjectWithFinalizer
+    internal class ManagedObjectWithFinalizer
     {
-        ~UnmanagedObjectWithFinalizer()
+        private IntPtr _unmanagedResource;
+
+        public ManagedObjectWithFinalizer()
         {
+            _unmanagedResource = Marshal.AllocHGlobal(10);
+        }
+        
+        ~ManagedObjectWithFinalizer()
+        {
+            Marshal.FreeHGlobal(_unmanagedResource);
+        }
+    }
+
+    internal class ManagedObjectWithIDisposable : IDisposable
+    {
+        // A pointer to 10 bytes allocated on the unmanaged heap.
+        private IntPtr _unmanagedResource;
+
+        public ManagedObjectWithIDisposable()
+        {
+            _unmanagedResource = Marshal.AllocHGlobal(10);
+        }
+        
+        public void Dispose()
+        {
+            Marshal.FreeHGlobal(_unmanagedResource);
+            GC.SuppressFinalize(this);
+        }
+
+        ~ManagedObjectWithIDisposable()
+        {
+            Marshal.FreeHGlobal(_unmanagedResource);
+        }
+    }
+
+    internal class DisposePatternDemo : IDisposable
+    {
+        private IntPtr _unmanagedResource;
+        private MemoryStream _unmanagedStream;
+        private bool _disposed;
+
+        public DisposePatternDemo()
+        {
+            _unmanagedResource = Marshal.AllocHGlobal(10);
+            _unmanagedStream = new();
+        }
+
+        /// <summary>
+        /// Dispose pattern takes advantage of finalizer and IDisposable.
+        /// If developer forgets to call 'Dispose', destructor will take care of clearing objects.
+        /// </summary>
+        /// <param name="disposing"></param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_disposed) return;
+
+            if (disposing)
+            {
+                _unmanagedStream.Dispose();
+                _unmanagedStream = null;
+            }
             
+            Marshal.FreeHGlobal(_unmanagedResource);
+        }
+        
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        ~DisposePatternDemo()
+        {
+            Dispose(false);
         }
     }
 }
